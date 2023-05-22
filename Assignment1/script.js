@@ -44,7 +44,6 @@ function updateItemList() {
   items.forEach((item, index) => {
     const itemCard = document.createElement('div');
     itemCard.className = 'item-card';
-    itemCard.className = 'item-card card-enter';
 
     const itemName = document.createElement('h3');
     itemName.textContent = item.name;
@@ -98,7 +97,6 @@ function updateItemList() {
     itemCard.appendChild(deleteButton);
 
     itemList.appendChild(itemCard);
-  
   });
 }
 
