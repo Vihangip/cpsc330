@@ -79,6 +79,7 @@ button {
   display: flex;
   flex-direction: column;
   align-items: center;
+  max-width: 300px;
 }
 
 .item-card img {
@@ -101,6 +102,9 @@ button {
 .stock-container {
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
+  margin-top: 15px;
+  margin-bottom: 15px;
 }
 
 .stock-container button {
@@ -115,6 +119,7 @@ button {
   align-items: center; 
   display: flex;
   justify-content: center;
+  
 }
 
 .stock-container button:hover {
@@ -123,7 +128,7 @@ button {
 
 .stock-container input {
   width: 50px;
-  height: 30px;
+  height: 20px;
   margin: 0 10px;
   text-align: center;
 }
