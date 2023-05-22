@@ -79,6 +79,12 @@ function updateItemList() {
       incrementStock(index);
     });
 
+    const deleteButton = document.createElement('button');
+    deleteButton.textContent = 'Delete';
+    deleteButton.addEventListener('click', function() {
+      deleteItem(index);
+    })
+
     stockContainer.appendChild(decrementButton);
     stockContainer.appendChild(itemStock);
     stockContainer.appendChild(incrementButton);
@@ -88,6 +94,7 @@ function updateItemList() {
     itemCard.appendChild(itemPrice);
     itemCard.appendChild(itemImage);
     itemCard.appendChild(stockContainer);
+    itemCard.appendChild(deleteButton);
 
     itemList.appendChild(itemCard);
   });
