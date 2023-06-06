@@ -1,8 +1,8 @@
 const initialState = {
   inventory: [
-    { name: 'Item 1', description: 'Description 1', price: '$10', image: 'https://example.com/image1.jpg' },
-    { name: 'Item 2', description: 'Description 2', price: '$20', image: 'https://example.com/image2.jpg' },
-    { name: 'Item 3', description: 'Description 3', price: '$30', image: 'https://example.com/image3.jpg' }
+    { name: 'Apple', description: 'Fruit', price: '$0.99', stock: '400', image: 'https://i5.walmartimages.ca/images/Enlarge/094/514/6000200094514.jpg' },
+    { name: 'Froot Loops', description: 'Cereal', price: '$5.99', stock: '0', image: 'https://assets.shop.loblaws.ca/products/20591279/b2/en/front/20591279_front_a06_@2.png' },
+    { name: 'Carrot', description: 'Vegetable', price: '$0.56', stock: '37', image: 'https://i5.walmartimages.ca/images/Enlarge/686/686/6000198686686.jpg' }
   ],
   selectedItem: null
 };
@@ -23,6 +23,11 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         selectedItem: action.payload
+      };
+    case 'DELETE_ALL_ITEMS':
+      return {
+         ...state,
+        inventory: []
       };
     default:
       return state;

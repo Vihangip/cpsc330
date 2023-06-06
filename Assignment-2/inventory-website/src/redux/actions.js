@@ -18,3 +18,9 @@ export const selectItem = item => {
     payload: item
   };
 };
+
+export const deleteAllItems = () => {
+  return {
+    type: 'DELETE_ALL_ITEMS'
+  };
+};
