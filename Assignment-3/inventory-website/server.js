@@ -8,7 +8,10 @@ const PORT = 3000;
 app.use(express.json());
 
 // Load the initial item data from a JSON file
-let inventory = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'inventory-website/data', 'items.json')));
+const initialInventory = JSON.parse(fs.readFileSync(path.join(__dirname, 'data', 'initial-items.json')));
+
+// Load the current item data from a JSON file
+let inventory = [...initialInventory];
 
 app.get('/items', (req, res) => {
   res.json(inventory);
@@ -35,7 +38,7 @@ app.delete('/items/:id', (req, res) => {
 
 // Helper function to save the inventory to the JSON file
 const saveInventory = () => {
-  fs.writeFileSync(path.join(__dirname, '..', 'data', 'items.json'), JSON.stringify(inventory, null, 2));
+  fs.writeFileSync(path.join(__dirname, 'data', 'items.json'), JSON.stringify(inventory, null, 2));
 };
 
 // Serve static files from the "build" directory

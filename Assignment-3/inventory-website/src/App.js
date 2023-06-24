@@ -8,7 +8,6 @@ import './App.css';
 
 
 function App() {
-  const [inventory, setInventory] = useState([]);
   const selectedItem = useSelector(state => state.selectedItem);
   const dispatch = useDispatch();
   const [name, setName] = useState('');
@@ -17,12 +16,17 @@ function App() {
   const [stock, setStock] = useState(0);
   const [image, setImage] = useState('');
   const [showDialog, setShowDialog] = useState(false);
+  const [inventory, setInventory] = useState([]);
 
-  useEffect(() => {
+  const fetchInventory = () => {
     fetch('/items')
       .then(response => response.json())
       .then(data => setInventory(data))
       .catch(error => console.error(error));
+  };
+
+  useEffect(() => {
+    fetchInventory();
   }, []);
 
   const handleSubmit = e => {
@@ -48,6 +52,7 @@ function App() {
           setPrice('');
           setStock(0);
           setImage('');
+          fetchInventory();
         } else {
           console.error('Failed to add item');
         }
@@ -59,7 +64,7 @@ function App() {
     fetch(`/items/${item.id}`, { method: 'DELETE' })
       .then(response => {
         if (response.status === 200) {
-          // Item deleted successfully
+          fetchInventory();
         } else {
           console.error('Failed to delete item');
         }
