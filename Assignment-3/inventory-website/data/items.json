@@ -1,0 +1,26 @@
+[
+  {
+    "id": "1",
+    "name": "Apple",
+    "description": "Fruit",
+    "price": "$0.99",
+    "stock": "400",
+    "image": "https://i5.walmartimages.ca/images/Enlarge/094/514/6000200094514.jpg"
+  },
+  {
+    "id": "2",
+    "name": "Froot Loops",
+    "description": "Cereal",
+    "price": "$5.99",
+    "stock": "0",
+    "image": "https://assets.shop.loblaws.ca/products/20591279/b2/en/front/20591279_front_a06_@2.png"
+  },
+  {
+    "id": "3",
+    "name": "Carrot",
+    "description": "Vegetable",
+    "price": "$0.56",
+    "stock": "37",
+    "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR5aKg_wQShro_jyWT80oMt2n_MHkcgbPAuhvWjBNvnk-RyyKAhkRyOKYcP4nRQ55HiyDU&usqp=CAU"
+  }
+]
