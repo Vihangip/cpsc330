@@ -1,45 +1,64 @@
 const express = require('express');
+const mongoose = require('mongoose');
 const fs = require('fs');
 const path = require('path');
 const app = express();
 const PORT = 3000;
+const Item = require('./item');
+const { v4: uuidv4 } = require('uuid');
 
-// Middleware to parse JSON data
 app.use(express.json());
 
-// Load the initial item data from a JSON file
-const initialInventory = JSON.parse(fs.readFileSync(path.join(__dirname, 'data', 'initial-items.json')));
-
-// Load the current item data from a JSON file
-let inventory = [...initialInventory];
-
 app.get('/items', (req, res) => {
-  res.json(inventory);
+  Item.find()
+    .then(items => {
+      res.json(items);
+    })
+    .catch(error => {
+      res.status(500).json({ error: 'Failed to fetch items' });
+    });
 });
 
 app.post('/items', (req, res) => {
   const newItem = req.body;
-  inventory.push(newItem);
-  saveInventory();
-  res.status(201).send('Item added successfully');
+  newItem.id = uuidv4(); // Generate a unique ID for the item
+
+  // Create a new item using the Item model
+  Item.create(newItem)
+    .then(createdItem => {
+      res.status(201).send('Item added successfully');
+    })
+    .catch(error => {
+      console.error('Failed to create item in the database', error);
+      res.status(500).send('Internal Server Error');
+    });
 });
+
+
 
 app.delete('/items/:id', (req, res) => {
   const itemId = req.params.id;
-  const itemIndex = inventory.findIndex(item => item.id === itemId);
-  if (itemIndex !== -1) {
-    inventory.splice(itemIndex, 1);
-    saveInventory();
-    res.send('Item deleted successfully');
-  } else {
-    res.status(404).send('Item not found');
-  }
+
+  console.log('Deleting item:', itemId);
+
+  // Remove the item from the database by its ID
+  Item.findByIdAndRemove(itemId)
+    .then(deletedItem => {
+      if (!deletedItem) {
+        console.error('Item not found');
+        res.status(404).send('Item not found');
+      } else {
+        console.log('Item deleted successfully', deletedItem);
+        res.send('Item deleted successfully');
+      }
+    })
+    .catch(error => {
+      console.error('Failed to delete item from the database', error);
+      res.status(500).send('Internal Server Error');
+    });
 });
 
-// Helper function to save the inventory to the JSON file
-const saveInventory = () => {
-  fs.writeFileSync(path.join(__dirname, 'data', 'items.json'), JSON.stringify(inventory, null, 2));
-};
+
 
 // Serve static files from the "build" directory
 app.use(express.static(path.join(__dirname, 'build')));
@@ -48,6 +67,20 @@ app.use(express.static(path.join(__dirname, 'build')));
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'build', 'index.html'));
 });
+
+const MONGODB_URI = 'mongodb+srv://m001-student:m001-mongodb-basics@sandbox.ec9hk0v.mongodb.net/?retryWrites=true&w=majority';
+
+mongoose.connect(MONGODB_URI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+})
+  .then(() => {
+    console.log('Connected to MongoDB');
+  })
+  .catch(err => {
+    console.error('Failed to connect to MongoDB', err);
+  });
+
 
 // Start the server
 app.listen(PORT, () => {

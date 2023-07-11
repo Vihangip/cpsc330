@@ -21,56 +21,81 @@ function App() {
   const fetchInventory = () => {
     fetch('/items')
       .then(response => response.json())
-      .then(data => setInventory(data))
+      .then(data => {
+        setInventory(data);
+      })
       .catch(error => console.error(error));
   };
+  
+  
 
   useEffect(() => {
     fetchInventory();
   }, []);
 
   const handleSubmit = e => {
-    e.preventDefault();
-    const newItem = {
-      name,
-      description,
-      price,
-      stock,
-      image
-    };
-    fetch('/items', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(newItem)
-    })
-      .then(response => {
-        if (response.status === 201) {
-          setName('');
-          setDescription('');
-          setPrice('');
-          setStock(0);
-          setImage('');
-          fetchInventory();
-        } else {
-          console.error('Failed to add item');
-        }
-      })
-      .catch(error => console.error(error));
+  e.preventDefault();
+
+  // Validate the form fields
+  if (!name || !description || !price) {
+    console.error('Name, description, and price are required');
+    return;
+  }
+
+  const newItem = {
+    name,
+    description,
+    price,
+    stock,
+    image
   };
 
-  const handleRemove = item => {
-    fetch(`/items/${item.id}`, { method: 'DELETE' })
-      .then(response => {
-        if (response.status === 200) {
-          fetchInventory();
-        } else {
-          console.error('Failed to delete item');
-        }
-      })
-      .catch(error => console.error(error));
-  };
+  // Make the POST request with the newItem data
+  fetch('/items', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(newItem)
+  })
+    .then(response => {
+      if (response.status === 201) {
+        setName('');
+        setDescription('');
+        setPrice('');
+        setStock(0);
+        setImage('');
+        fetchInventory();
+      } else {
+        console.error('Failed to add item');
+      }
+    })
+    .catch(error => console.error(error));
+};
+
+
+const handleRemove = item => {
+  console.log(item);
+  const itemId = item._id;
+
+  if (!itemId) {
+    console.error('Item ID is missing');
+    return;
+  }
+
+  console.log('Deleting item:', itemId);
+
+  fetch(`/items/${itemId}`, { method: 'DELETE' })
+    .then(response => {
+      if (response.status === 200) {
+        fetchInventory();
+      } else {
+        console.error('Failed to delete item wqqq');
+      }
+    })
+    .catch(error => console.error(error));
+};
+
 
   const handleItemClick = item => {
     dispatch(selectItem(item));
@@ -151,16 +176,18 @@ function App() {
         <h2>Items</h2>
       </div>
       <div className="item-list">
-        {inventory.map(item => (
-          <div key={item.name} className="item-card" onClick={() => handleItemClick(item)}>
-            <img src={item.image} alt={item.name} width="100" />
-            <span className="item-name">{item.name}</span>
-            <button type="button" onClick={event => { event.stopPropagation(); handleRemove(item); }}>
-              X
-            </button>
-          </div>
-        ))}
+      {inventory.map(item => (
+  <div key={item._id} className="item-card" onClick={() => handleItemClick(item)}>
+    <img src={item.image} alt={item.name} width="100" />
+    <span className="item-name">{item.name}</span>
+    <button type="button" onClick={event => { event.stopPropagation(); handleRemove(item); }}>
+      X
+    </button>
+  </div>
+))}
+
       </div>
+
 
       {showDialog && (
         <div className="dialog-overlay">
