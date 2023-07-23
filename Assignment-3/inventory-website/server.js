@@ -4,7 +4,7 @@ const fs = require('fs');
 const path = require('path');
 const app = express();
 const PORT = 3000;
-const Item = require('./item');
+const Item = require('./Item');
 const { v4: uuidv4 } = require('uuid');
 
 app.use(express.json());
