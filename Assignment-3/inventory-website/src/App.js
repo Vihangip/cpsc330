@@ -26,6 +26,15 @@ function App() {
       })
       .catch(error => console.error(error));
   };
+
+  const fetchItem = (id) => {
+    fetch(`/items/${id}`)
+      .then(response => response.json())
+      .then(data => {
+        dispatch(selectItem(data)); // dispatch the received item to the Redux store
+      })
+      .catch(error => console.error(error));
+  };
   
   
 
@@ -97,10 +106,10 @@ const handleRemove = item => {
 };
 
 
-  const handleItemClick = item => {
-    dispatch(selectItem(item));
-    setShowDialog(true);
-  };
+const handleItemClick = item => {
+  fetchItem(item._id);
+  setShowDialog(true);
+};
 
   const handleDialogClose = () => {
     setShowDialog(false);
